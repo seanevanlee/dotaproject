@@ -1,22 +1,32 @@
 /** @type {{ heroName: string, heroUltimate: string, imageUrl: string }[]} */
-const heroPosts = [];
+let heroPosts = [];
+let idCounter = 1;
 
 export function createHeroPost({ heroName, heroUltimate, imageUrl }) {
-  heroPosts.push({
-    id: heroPosts.length + 1,
+  const heroPost = {
+    id: idCounter,
     heroName,
     heroUltimate,
     imageUrl,
-  });
-  return { id: heroPosts.length, heroName, heroUltimate, imageUrl };
+  };
+  heroPosts.push(heroPost);
+
+  idCounter++;
+
+  return { id: heroPost.id, heroName, heroUltimate, imageUrl };
 }
 
 export function updateHeroPost(id, { heroName, heroUltimate, imageUrl }) {
   const index = heroPosts.findIndex((x) => x.id == id);
 
-  heroPosts[index] = { heroName, heroUltimate, imageUrl };
+  heroPosts[index] = { id, heroName, heroUltimate, imageUrl };
 }
 
+export function deleteHeroPost(id) {
+  heroPosts = heroPosts.filter((x) => {
+    return x.id != id;
+  });
+}
 export function getAllHeroPosts() {
   return heroPosts;
 }
