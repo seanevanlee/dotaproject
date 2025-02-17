@@ -1,0 +1,6 @@
+# Update pre-existing heroes from here.
+PUT /api/hero-post/1 HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+
+{"heroName":"Tom Brady with a baseball team","heroUltimate":"Retire many times","imageURL":"https://i.imgur.com/kFPrWNl.jpeg"}

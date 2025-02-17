@@ -1,0 +1,3 @@
+# write raw https requests. To get all hero posts.
+GET /api/hero-post HTTP/1.1
+Host: localhost:3000
