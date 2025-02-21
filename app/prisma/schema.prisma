@@ -26,7 +26,7 @@ model User {
 // HeroPost model consisting of hero id, photo url, name, and ultimate
 model HeroPost {
   id       Int    @id @default(autoincrement())
-  photoUrl String @unique
+  photoUrl String
   name     String @unique
   ultimate String
   userId   Int

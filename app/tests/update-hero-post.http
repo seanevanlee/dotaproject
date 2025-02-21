@@ -3,4 +3,4 @@ PUT /api/hero-post/1 HTTP/1.1
 Host: localhost:3000
 Content-Type: application/json
 
-{"heroName":"Tom Brady with a baseball team","heroUltimate":"Retire many times","imageUrl":"https://i.imgur.com/kFPrWNl.jpeg"}
+{"name":"Tom Brady with a baseball team","ultimate":"Retire many times","photoUrl":"https://i.imgur.com/kFPrWNl.jpeg"}
