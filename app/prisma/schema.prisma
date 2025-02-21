@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Specify the provider and DATABASE_URL
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Create model(s), singular. Set a constraint on the column, automatically increasing the ID value starting at 1.
+// User model
+model User {
+  id        Int        @id @default(autoincrement())
+  username  String     @unique
+  heroPosts HeroPost[]
+}
+
+// HeroPost model consisting of hero id, photo url, name, and ultimate
+model HeroPost {
+  id       Int    @id @default(autoincrement())
+  photoUrl String @unique
+  name     String @unique
+  ultimate String
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+// Make the User and HeroPost models related to see relevant posts using @relation and corresponding model
