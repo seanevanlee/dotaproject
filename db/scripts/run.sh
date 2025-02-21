@@ -7,5 +7,3 @@ docker run \
   -p $DB_PORT:$DB_PORT \
   --name dotaproject-db \
   -t dotaproject/db:1.0
-
-$SHELL

@@ -2,18 +2,24 @@
   "name": "app",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "cd client && npm run dev",
     "start": "nodemon index.js"
+  },
+  "prisma":{
+"seed": "node prisma/seed.js"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@clerk/clerk-react": "^5.22.13",
+    "@prisma/client": "^6.4.1",
     "express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "prisma": "^6.4.1"
   }
 }
