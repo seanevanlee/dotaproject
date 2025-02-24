@@ -1,4 +1,4 @@
-# Create new heros from here.
+# Create new heros from here with raw HTTP
 POST /api/hero-post HTTP/1.1
 Host: localhost:3000
 Content-Type: application/json

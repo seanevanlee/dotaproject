@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "cd client && npm run dev",
+    "dev": "concurrently \"nodemon index.js\" \"cd client && npm run dev\"",
     "start": "nodemon index.js",
     "db:migrate": "npx prisma migrate dev",
     "db:seed": "npx prisma db seed",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@clerk/clerk-react": "^5.22.13",
     "@prisma/client": "^6.4.1",
+    "concurrently": "^9.1.2",
     "express": "^5.0.1"
   },
   "devDependencies": {

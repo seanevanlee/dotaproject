@@ -8,7 +8,7 @@
 // "@clerk/clerk-react";
 
 import "./App.css";
-import { Hero } from "./components/Hero";
+import NewHeroForm from "./components/NewHeroForm";
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -23,14 +23,9 @@ function App() {
     //   </SignedIn>
     // </header>
     <>
-      <header>Header test</header>
+      <header>DOTA HERO HEADER</header>
       <main>
-        <Hero />
-        <Hero />
-        <Hero />
-        <Hero />
-        <Hero />
-        <Hero />
+        <NewHeroForm />
       </main>
       <footer>Footer test</footer>
     </>

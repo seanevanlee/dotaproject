@@ -1,12 +1,6 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import {
-  createHeroPost,
-  deleteHeroPost,
-  getAllHeroPosts,
-  updateHeroPost,
-} from "./db.js";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
