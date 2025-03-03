@@ -1,24 +1,10 @@
 import { useState, useEffect } from "react";
 import HeroBlock from "./HeroBlock";
 
-export default function HeroFeed() {
+export default function HeroFeed({ heroPosts }) {
   // call a useEffect before the return render to only render all heroes at once when page first loads
   // use a fetch to call the url to back-end app, GET method as listed in the HTTP test
-  const [heroPosts, setHeroPosts] = useState();
 
-  useEffect(() => {
-    async function fetchHeroPosts() {
-      // store the return value of the function in a variable
-      const response = await fetch("http://localhost:5173/api/hero-post", {
-        method: "GET",
-      });
-      const data = await response.json();
-      // intermediate state to get data into hero blocks
-      setHeroPosts(data);
-    }
-    // after defining it as async above then call it again
-    fetchHeroPosts();
-  }, []);
   return (
     <div>
       {heroPosts

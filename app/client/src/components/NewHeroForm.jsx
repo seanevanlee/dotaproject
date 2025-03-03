@@ -18,7 +18,7 @@ export default function NewHeroForm() {
     if (!response.ok) {
       throw new Error("Something went wrong. Please try again.");
     }
-
+    // create something that reads the heroes again
     // const data = await response.json();
     console.log("Hero submitted!");
   };
