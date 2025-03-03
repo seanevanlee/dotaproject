@@ -5,32 +5,30 @@ export default function NewHeroForm() {
   const [photoUrl, setPhotoUrl] = useState();
   const [ultimate, setUltimate] = useState();
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch(`/api/hero-post`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, photoUrl, ultimate }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Something went wrong. Please try again.");
+    }
+
+    // const data = await response.json();
+    console.log("Hero submitted!");
+  };
+
   useEffect(() => {
     console.log("hero name has changed");
   }, [name]);
 
   return (
-    <form
-      onSubmit={async (e) => {
-        e.preventDefault();
-        // TODO: Send data to backend
-
-        const response = await fetch(`/api/hero-post`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name, photoUrl, ultimate }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Something went wrong. Please try again.");
-        }
-
-        // const data = await response.json();
-        console.log("Hero submitted!");
-      }}
-    >
+    <form onSubmit={handleSubmit}>
       {/* Grab value from text box */}
       Submit Hero Name:
       <input

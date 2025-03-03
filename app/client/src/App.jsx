@@ -8,6 +8,7 @@
 // "@clerk/clerk-react";
 
 import "./App.css";
+import HeroFeed from "./components/HeroFeed";
 import NewHeroForm from "./components/NewHeroForm";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
     <>
       <header>DOTA HERO HEADER</header>
       <main>
+        <HeroFeed />
         <NewHeroForm />
       </main>
       <footer>Footer test</footer>
