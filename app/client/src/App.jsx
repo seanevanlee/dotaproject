@@ -46,7 +46,7 @@ function App() {
       <header>DOTA HERO HEADER</header>
 
       <main>
-        <HeroFeed heroPosts={heroPosts} />
+        <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
         <NewHeroForm readHeroPosts={fetchHeroPosts} />
       </main>
       <footer>Footer test</footer>
