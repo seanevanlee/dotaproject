@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function NewHeroForm() {
+export default function NewHeroForm({ readHeroPosts }) {
   const [name, setName] = useState();
   const [photoUrl, setPhotoUrl] = useState();
   const [ultimate, setUltimate] = useState();
@@ -18,7 +18,8 @@ export default function NewHeroForm() {
     if (!response.ok) {
       throw new Error("Something went wrong. Please try again.");
     }
-    // create something that reads the heroes again
+    // create something that reads the heroes again, call the function
+    readHeroPosts();
     // const data = await response.json();
     console.log("Hero submitted!");
   };

@@ -3,4 +3,4 @@ POST /api/hero-post HTTP/1.1
 Host: localhost:3000
 Content-Type: application/json
 
-{"name":"Tom Brady with New England","ultimate":"Retire many times","photoUrl":"https://i.imgur.com/kFPrWNl.jpeg"}
+{"name":"Spongebob","ultimate":"Lives in a pineapple under the sea","photoUrl":"https://i.imgur.com/kFPrWNl.jpeg"}

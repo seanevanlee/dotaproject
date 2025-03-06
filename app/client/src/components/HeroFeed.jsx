@@ -11,6 +11,7 @@ export default function HeroFeed({ heroPosts }) {
         ? heroPosts.map((heroPost, i) => (
             <HeroBlock
               key={i}
+              id={heroPost.id}
               heroName={heroPost.name}
               photoUrl={heroPost.photoUrl}
               heroUltimate={heroPost.ultimate}

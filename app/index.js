@@ -37,38 +37,50 @@ app.get(
   }
 );
 // post to create data
-app.post("/api/hero-post", async (req, res) => {
-  await prisma.heroPost.create({
-    data: {
-      name: req.body.name,
-      photoUrl: req.body.photoUrl,
-      ultimate: req.body.ultimate,
-      user: { connect: { username: "seanlee" } },
-    },
-  });
-  res.send("create hero post response");
-});
+app.post(
+  "/api/hero-post",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    await prisma.heroPost.create({
+      data: {
+        name: req.body.name,
+        photoUrl: req.body.photoUrl,
+        ultimate: req.body.ultimate,
+        user: { connect: { username: "seanlee" } },
+      },
+    });
+    res.send("create hero post response");
+  }
+);
 
 // update CRUD. :id to catch all.
-app.put("/api/hero-post/:id", async (req, res) => {
-  await prisma.heroPost.update({
-    data: {
-      name: req.body.name,
-      photoUrl: req.body.photoUrl,
-      ultimate: req.body.ultimate,
-    },
-    where: { id: Number(req.params.id) },
-  });
-  res.send("update this hero info response");
-});
+app.put(
+  "/api/hero-post/:id",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    await prisma.heroPost.update({
+      data: {
+        name: req.body.name,
+        photoUrl: req.body.photoUrl,
+        ultimate: req.body.ultimate,
+      },
+      where: { id: Number(req.params.id) },
+    });
+    res.send("update this hero info response");
+  }
+);
 
 // delete CRUD
-app.delete("/api/hero-post/:id", async (req, res) => {
-  await prisma.heroPost.delete({
-    where: { id: Number(req.params.id) },
-  });
-  res.send("delete this hero info reponse");
-});
+app.delete(
+  "/api/hero-post/:id",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    await prisma.heroPost.delete({
+      where: { id: Number(req.params.id) },
+    });
+    res.send("delete this hero info reponse");
+  }
+);
 
 app.listen(3000, () => {
   console.log("server is listening on port 3000");
