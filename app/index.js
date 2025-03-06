@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { PrismaClient } from "@prisma/client";
+import { requireAuth } from "@clerk/express";
+
 const prisma = new PrismaClient();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,12 +21,21 @@ app.use(express.json());
 // add a request handler
 // arrow function called when app received request for that route. request,response.
 // the get route to get all of the hero post - reading for data
-app.get("/api/hero-post", async (req, res) => {
-  // data will be an array of objects. API route to get that data.
-  // using await inside the async. this will be visible in HTTP tests.
-  const heroPosts = await prisma.heroPost.findMany();
-  res.send(heroPosts);
-});
+// calling next to move on from requireAuth to asnyc (req,res)
+
+// middleware function: request, response, and next.
+// to call next function if the user who sent the request is logged in. Confer how Clerk verifies the user is logged in
+
+app.get(
+  "/api/hero-post",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    // data will be an array of objects. API route to get that data.
+    // using await inside the async. this will be visible in HTTP tests.
+    const heroPosts = await prisma.heroPost.findMany();
+    res.send(heroPosts);
+  }
+);
 // post to create data
 app.post("/api/hero-post", async (req, res) => {
   await prisma.heroPost.create({
@@ -62,3 +73,6 @@ app.delete("/api/hero-post/:id", async (req, res) => {
 app.listen(3000, () => {
   console.log("server is listening on port 3000");
 });
+
+// middleware function: request, response, and next.
+// to call next function if the user who sent the request is logged in. Confer how Clerk verifies the user is logged in
