@@ -1,5 +1,3 @@
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import {
   SignedIn,
   SignedOut,
@@ -7,7 +5,6 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 
-import "./App.css";
 import HeroFeed from "./components/HeroFeed";
 import NewHeroForm from "./components/NewHeroForm";
 import { useState, useEffect } from "react";
@@ -35,21 +32,31 @@ function App() {
     fetchHeroPosts();
   }, []);
 
+  // Dota logo on left, Clerk logo on right
   return (
     <>
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-      <header>DOTA HERO HEADER</header>
+      <header className="flex justify-center">
+        <div className="flex justify-between container border border-gray-200 rounded p-4">
+          <img className="size-9" src="https://i.imgur.com/NK6Ofjs.jpeg" />
 
-      <main>
-        <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
-        <NewHeroForm readHeroPosts={fetchHeroPosts} />
+          <SignedOut>
+            <SignInButton />
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </header>
+
+      <main className="flex justify-center">
+        <div className="flex items-center container flex-col">
+          <NewHeroForm readHeroPosts={fetchHeroPosts} />
+          <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
+        </div>
       </main>
-      <footer></footer>
+      <footer className="flex justify-center">
+        <div className="flex justify-between container"></div>
+      </footer>
     </>
   );
 }

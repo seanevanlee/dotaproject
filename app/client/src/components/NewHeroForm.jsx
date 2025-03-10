@@ -30,7 +30,10 @@ export default function NewHeroForm({ readHeroPosts }) {
   }, [name]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      className="border border-amber-700 rounded p-4"
+      onSubmit={handleSubmit}
+    >
       {/* Grab value from text box */}
       Submit Hero Name:
       <input
