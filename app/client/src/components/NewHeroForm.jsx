@@ -15,6 +15,7 @@ export default function NewHeroForm({ readHeroPosts }) {
       body: JSON.stringify({ name, photoUrl, ultimate }),
     });
 
+    // 'false' if error status code
     if (!response.ok) {
       throw new Error("Something went wrong. Please try again.");
     }

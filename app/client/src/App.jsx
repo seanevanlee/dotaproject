@@ -49,7 +49,7 @@ function App() {
         <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
         <NewHeroForm readHeroPosts={fetchHeroPosts} />
       </main>
-      <footer>Footer test</footer>
+      <footer></footer>
     </>
   );
 }

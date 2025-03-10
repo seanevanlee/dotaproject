@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+// import { useState } from "react";
 import HeroBlock from "./HeroBlock";
 
 export default function HeroFeed({ heroPosts, readHeroPosts }) {
@@ -19,21 +19,6 @@ export default function HeroFeed({ heroPosts, readHeroPosts }) {
             />
           ))
         : "LOADING..."}
-      {/* //   <HeroBlock
-    //     heroName={heroPosts[0].name}
-    //     photoUrl={heroPosts[0].photoUrl}
-    //     heroUltimate={heroPosts[0].ultimate}
-    //   /> */}
-      {/* <HeroBlock
-        heroName={"Goku"}
-        photoUrl={"https://i.imgur.com/kFPrWNl.jpeg"}
-        heroUltimate={"Spirit bomb"}
-      />
-      <HeroBlock
-        heroName={"Tom Brady"}
-        photoUrl={"https://i.imgur.com/kFPrWNl.jpeg"}
-        heroUltimate={"Retire many times"}
-      /> */}
     </div>
   );
 }

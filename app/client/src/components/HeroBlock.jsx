@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EditHeroForm from "./EditHeroForm";
 // declare props below
 export default function HeroBlock({
@@ -31,7 +31,14 @@ export default function HeroBlock({
   return (
     <>
       {mode == "edit" ? (
-        <EditHeroForm id={id} readHeroPosts={readHeroPosts} />
+        <EditHeroForm
+          id={id}
+          readHeroPosts={readHeroPosts}
+          setMode={setMode}
+          initialHeroName={heroName}
+          initialPhotoUrl={photoUrl}
+          initialHeroUltimate={heroUltimate}
+        />
       ) : (
         <div>
           <button onClick={handleDeleteClick}>Delete</button>
