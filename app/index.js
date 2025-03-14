@@ -3,8 +3,18 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { PrismaClient } from "@prisma/client";
 import { requireAuth } from "@clerk/express";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const prisma = new PrismaClient();
+
+const s3 = new S3Client({
+  region: "us-east-2",
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,6 +89,39 @@ app.delete(
       where: { id: Number(req.params.id) },
     });
     res.send("delete this hero info reponse");
+  }
+);
+
+app.post(
+  "/api/generate-upload-url",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    try {
+      const { filename, contentType } = req.body;
+      const userId = req.auth.userId; // Clerk provides this
+
+      if (!filename || !contentType) {
+        return res
+          .status(400)
+          .json({ error: "Missing filename or contentType" });
+      }
+      // decide the dynamic part of the url with a timestamp in the filename
+      const key = `uploads/${Date.now()}-${filename}`;
+
+      const command = new PutObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: key,
+        ContentType: contentType,
+        ACL: "private", // Files are private by default
+      });
+
+      const signedUrl = await getSignedUrl(s3, command, { expiresIn: 60 }); // 60 sec expiry
+
+      res.json({ uploadUrl: signedUrl, key });
+    } catch (error) {
+      console.error("Error generating signed URL:", error);
+      res.status(500).json({ error: "Failed to generate signed URL" });
+    }
   }
 );
 

@@ -47,15 +47,18 @@ function App() {
           </SignedIn>
         </div>
       </header>
+      <br></br>
 
       <main className="flex justify-center">
-        <div className="flex items-center container flex-col">
+        <div className="flex items-center container flex-col space-y-7">
           <NewHeroForm readHeroPosts={fetchHeroPosts} />
+
           <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
         </div>
       </main>
-      <footer className="flex justify-center">
-        <div className="flex justify-between container"></div>
+      <footer className="flex justify-center mt-8">
+        <div className="flex items-center "></div>
+        Created by Sean Lee
       </footer>
     </>
   );

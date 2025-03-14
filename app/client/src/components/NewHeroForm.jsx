@@ -1,12 +1,19 @@
 import { useState, useEffect } from "react";
+import uploadImage from "../utils/upload-image";
 
 export default function NewHeroForm({ readHeroPosts }) {
   const [name, setName] = useState();
-  const [photoUrl, setPhotoUrl] = useState();
+  const [photoFile, setPhotoFile] = useState();
   const [ultimate, setUltimate] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // upload the image before the hero post gets made
+    // await the promise so that it does not run in a parallel thread
+    // save the return value of the uploadImage function call in a variable
+
+    const photoUrl = await uploadImage(photoFile);
+
     const response = await fetch(`/api/hero-post`, {
       method: "POST",
       headers: {
@@ -37,6 +44,7 @@ export default function NewHeroForm({ readHeroPosts }) {
       {/* Grab value from text box */}
       Submit Hero Name:
       <input
+        className="border border-gray-200 rounded p-4"
         type="text"
         onChange={(e) => {
           setName(e.target.value);
@@ -45,14 +53,15 @@ export default function NewHeroForm({ readHeroPosts }) {
       />
       Submit Photo:
       <input
-        type="text"
+        className="border border-gray-200 rounded p-4"
+        type="file"
         onChange={(e) => {
-          setPhotoUrl(e.target.value);
+          setPhotoFile(e.target.files[0]);
         }}
-        value={photoUrl}
       />
       Submit Ultimate Idea:
       <textarea
+        className="border border-gray-200 rounded p-4"
         onChange={(e) => {
           setUltimate(e.target.value);
         }}

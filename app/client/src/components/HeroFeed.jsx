@@ -6,7 +6,7 @@ export default function HeroFeed({ heroPosts, readHeroPosts }) {
   // use a fetch to call the url to back-end app, GET method as listed in the HTTP test
 
   return (
-    <div>
+    <div className="border border-b-blue-950 rounded p-4">
       {heroPosts
         ? heroPosts.map((heroPost, i) => (
             <HeroBlock
