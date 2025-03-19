@@ -14,6 +14,7 @@ export default function NewHeroForm({ readHeroPosts }) {
 
     const photoUrl = await uploadImage(photoFile);
 
+    // submit the hero idea
     const response = await fetch(`/api/hero-post`, {
       method: "POST",
       headers: {

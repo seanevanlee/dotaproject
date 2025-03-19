@@ -23,7 +23,9 @@ const uploadImage = async (file) => {
   if (!uploadRes.ok) throw new Error("Upload to S3 failed");
 
   console.log("File uploaded:", key);
-  const url = `https://heroverse.s3.amazonaws.com/${key}`;
+  const url = `https://${
+    import.meta.env.VITE_AWS_S3_BUCKET_NAME
+  }.s3.amazonaws.com/${key}`;
   return url;
 };
 

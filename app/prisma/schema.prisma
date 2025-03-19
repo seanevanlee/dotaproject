@@ -19,6 +19,7 @@ datasource db {
 // User model
 model User {
   id        Int        @id @default(autoincrement())
+  idInClerk String     @unique
   username  String     @unique
   heroPosts HeroPost[]
 }
@@ -30,6 +31,8 @@ model HeroPost {
   name     String @unique
   ultimate String
   userId   Int
+  // This is a relation field. It does not exist in the database.
+  // It will only exist in the object that Prisma gives us when we query the database AND only if we "include" it.
   user     User   @relation(fields: [userId], references: [id])
 }
 

@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import { requireAuth } from "@clerk/express";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { clerkMiddleware } from "@clerk/express";
 
 const prisma = new PrismaClient();
 
@@ -26,6 +27,8 @@ const app = express();
 // point to the react app build and serve those files
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
+app.use(clerkMiddleware());
+
 // turn res objects into json via express
 app.use(express.json());
 // add a request handler
@@ -42,7 +45,9 @@ app.get(
   async (req, res) => {
     // data will be an array of objects. API route to get that data.
     // using await inside the async. this will be visible in HTTP tests.
-    const heroPosts = await prisma.heroPost.findMany();
+    const heroPosts = await prisma.heroPost.findMany({
+      include: { user: true },
+    });
     res.send(heroPosts);
   }
 );
@@ -56,7 +61,8 @@ app.post(
         name: req.body.name,
         photoUrl: req.body.photoUrl,
         ultimate: req.body.ultimate,
-        user: { connect: { username: "seanlee" } },
+        // req.auth.userId for the current user's ID in Clerk
+        user: { connect: { idInClerk: req.auth.userId } },
       },
     });
     res.send("create hero post response");
@@ -67,7 +73,24 @@ app.post(
 app.put(
   "/api/hero-post/:id",
   requireAuth({ signInUrl: "/sign-in" }),
+
   async (req, res) => {
+    // to grab the first hero post that matches both the ID and the user, not just any post
+
+    req.auth.userId;
+
+    const post = await prisma.heroPost.findFirst({
+      include: { user: true },
+      where: { id: Number(req.params.id) },
+    });
+
+    // "The idInClerk of the user of the post"
+    // post.user.idInClerk
+    // if they are not allowed then throw an error - to immediately exit the code and by default, logs the error
+    if (post.user.idInClerk !== req.auth.userId) {
+      throw new Error("You are not the correct logged in user for this post");
+    }
+
     await prisma.heroPost.update({
       data: {
         name: req.body.name,
@@ -80,14 +103,23 @@ app.put(
   }
 );
 
-// delete CRUD
+// delete CRUD. Delete posts that are only yours.
 app.delete(
   "/api/hero-post/:id",
   requireAuth({ signInUrl: "/sign-in" }),
   async (req, res) => {
+    const post = await prisma.heroPost.findFirst({
+      include: { user: true },
+      where: { id: Number(req.params.id) },
+    });
+
+    if (post.user.idInClerk !== req.auth.userId) {
+      throw new Error("You are not the correct logged in user for this post");
+    }
     await prisma.heroPost.delete({
       where: { id: Number(req.params.id) },
     });
+
     res.send("delete this hero info reponse");
   }
 );

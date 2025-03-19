@@ -1,7 +1,10 @@
 import { useState } from "react";
 import EditHeroForm from "./EditHeroForm";
+import { useUser } from "@clerk/clerk-react";
+
 // declare props below
 export default function HeroBlock({
+  userIdInClerk,
   id,
   heroName,
   photoUrl,
@@ -9,6 +12,8 @@ export default function HeroBlock({
   readHeroPosts,
 }) {
   const [mode, setMode] = useState("read");
+  // useUser will return an object with a property called User
+  const { user, isLoaded, isSignedIn } = useUser();
 
   const handleDeleteClick = async () => {
     const response = await fetch(`/api/hero-post/${id}`, {
@@ -41,11 +46,19 @@ export default function HeroBlock({
         />
       ) : (
         <div>
-          <button onClick={handleDeleteClick}>Delete</button>
-          <button onClick={handleEditClick}>Edit</button>
-          Hero Name: {heroName}
+          <div className="text-2xl">Hero Name: {heroName}</div>
+          {isLoaded == true &&
+          isSignedIn == true &&
+          user.id == userIdInClerk ? (
+            <>
+              <button onClick={handleDeleteClick}>Delete</button>
+              <button onClick={handleEditClick}>Edit</button>
+            </>
+          ) : (
+            ""
+          )}
+          <img src={photoUrl} />
           <br />
-          Photo: {photoUrl} <br />
           Hero Ultimate: {heroUltimate}
           <br />
         </div>
