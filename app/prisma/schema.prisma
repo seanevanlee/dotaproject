@@ -26,14 +26,15 @@ model User {
 
 // HeroPost model consisting of hero id, photo url, name, and ultimate
 model HeroPost {
-  id       Int    @id @default(autoincrement())
-  photoUrl String
-  name     String @unique
-  ultimate String
-  userId   Int
+  id        Int      @id @default(autoincrement())
+  photoUrl  String
+  name      String   @unique
+  ultimate  String
+  userId    Int
+  createdAt DateTime @default(now())
   // This is a relation field. It does not exist in the database.
   // It will only exist in the object that Prisma gives us when we query the database AND only if we "include" it.
-  user     User   @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 // Make the User and HeroPost models related to see relevant posts using @relation and corresponding model

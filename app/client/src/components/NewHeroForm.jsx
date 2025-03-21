@@ -62,7 +62,7 @@ export default function NewHeroForm({ readHeroPosts }) {
       />
       Submit Ultimate Idea:
       <textarea
-        className="border border-gray-200 rounded p-4"
+        className="border border-gray-200 rounded p-4 w-48 resize-none field-sizing-content"
         onChange={(e) => {
           setUltimate(e.target.value);
         }}

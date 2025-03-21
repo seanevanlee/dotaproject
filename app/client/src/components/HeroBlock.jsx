@@ -1,6 +1,8 @@
 import { useState } from "react";
 import EditHeroForm from "./EditHeroForm";
 import { useUser } from "@clerk/clerk-react";
+import NewHeroForm from "./NewHeroForm";
+import NewCommentForm from "./NewCommentForm";
 
 // declare props below
 export default function HeroBlock({
@@ -46,7 +48,7 @@ export default function HeroBlock({
         />
       ) : (
         <div>
-          <div className="text-2xl">Hero Name: {heroName}</div>
+          <div className="text-5xl">Hero Name: {heroName}</div>
           {isLoaded == true &&
           isSignedIn == true &&
           user.id == userIdInClerk ? (
@@ -57,10 +59,17 @@ export default function HeroBlock({
           ) : (
             ""
           )}
-          <img src={photoUrl} />
+          <img className="w-2xl" src={photoUrl} />
           <br />
           Hero Ultimate: {heroUltimate}
           <br />
+          <div>
+            <NewCommentForm heroPostId={id} />
+
+            <div>Player 1: Wow this is so cool</div>
+            <div>Player 2: This is terrible</div>
+            <div>Player 3: Neutral opinion</div>
+          </div>
         </div>
       )}
     </>

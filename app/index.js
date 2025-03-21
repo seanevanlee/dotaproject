@@ -45,8 +45,11 @@ app.get(
   async (req, res) => {
     // data will be an array of objects. API route to get that data.
     // using await inside the async. this will be visible in HTTP tests.
+
+    // sort the heroes by newest on top
     const heroPosts = await prisma.heroPost.findMany({
       include: { user: true },
+      orderBy: { createdAt: "desc" },
     });
     res.send(heroPosts);
   }
