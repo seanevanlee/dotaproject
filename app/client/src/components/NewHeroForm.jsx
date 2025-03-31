@@ -38,14 +38,11 @@ export default function NewHeroForm({ readHeroPosts }) {
   }, [name]);
 
   return (
-    <form
-      className="border border-amber-700 rounded p-4"
-      onSubmit={handleSubmit}
-    >
+    <form className="border border-b-black rounded p-4" onSubmit={handleSubmit}>
       {/* Grab value from text box */}
       Submit Hero Name:
       <input
-        className="border border-gray-200 rounded p-4"
+        className="border border-b-black rounded p-4"
         type="text"
         onChange={(e) => {
           setName(e.target.value);

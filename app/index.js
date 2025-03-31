@@ -160,6 +160,43 @@ app.post(
   }
 );
 
+// comments below
+app.post(
+  "/api/hero-post/:heroPostId/comment",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    // parameter to the req,res async function
+
+    const userIdInClerk = req.auth.userId; // Clerk provides this
+
+    const comment = await prisma.comment.create({
+      data: {
+        message: req.body.message,
+        // add a path parameter
+        heroPost: { connect: { id: Number(req.params.heroPostId) } },
+        // req.auth.userId for the current user's ID in Clerk
+        // the userId in database will never equal the userId in Clerk
+
+        user: { connect: { idInClerk: userIdInClerk } },
+      },
+    });
+    res.send(comment);
+  }
+);
+
+app.get(
+  "/api/hero-post/:heroPostId/comment",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    const userIdInClerk = req.auth.userId;
+    const comment = await prisma.comment.findMany({
+      include: { user: true },
+      orderBy: { createdAt: "desc" },
+      where: { heroPostId: Number(req.params.heroPostId) },
+    });
+    res.send(comment);
+  }
+);
 app.listen(3000, () => {
   console.log("server is listening on port 3000");
 });

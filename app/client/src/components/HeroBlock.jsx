@@ -3,7 +3,7 @@ import EditHeroForm from "./EditHeroForm";
 import { useUser } from "@clerk/clerk-react";
 import NewHeroForm from "./NewHeroForm";
 import NewCommentForm from "./NewCommentForm";
-
+import { useEffect } from "react";
 // declare props below
 export default function HeroBlock({
   userIdInClerk,
@@ -14,8 +14,27 @@ export default function HeroBlock({
   readHeroPosts,
 }) {
   const [mode, setMode] = useState("read");
+  const [comments, setComments] = useState([]);
   // useUser will return an object with a property called User
   const { user, isLoaded, isSignedIn } = useUser();
+
+  async function fetchComments() {
+    // store the return value of the function in a variable
+    // give option to follow redirect
+    const response = await fetch(`/api/hero-post/${id}/comment`, {
+      method: "GET",
+    });
+    if (response.redirected) {
+      window.location.href = response.url;
+    }
+    const data = await response.json();
+    // intermediate state to get data into hero blocks
+    setComments(data);
+  }
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
 
   const handleDeleteClick = async () => {
     const response = await fetch(`/api/hero-post/${id}`, {
@@ -54,6 +73,7 @@ export default function HeroBlock({
           user.id == userIdInClerk ? (
             <>
               <button onClick={handleDeleteClick}>Delete</button>
+              <br />
               <button onClick={handleEditClick}>Edit</button>
             </>
           ) : (
@@ -64,11 +84,15 @@ export default function HeroBlock({
           Hero Ultimate: {heroUltimate}
           <br />
           <div>
-            <NewCommentForm heroPostId={id} />
+            <NewCommentForm heroPostId={id} readComments={fetchComments} />
 
-            <div>Player 1: Wow this is so cool</div>
-            <div>Player 2: This is terrible</div>
-            <div>Player 3: Neutral opinion</div>
+            {comments.map((comment, i) => {
+              return (
+                <div key={i}>
+                  {comment.user.username}: {comment.message}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
