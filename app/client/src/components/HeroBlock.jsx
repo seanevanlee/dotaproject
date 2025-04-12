@@ -4,6 +4,8 @@ import { useUser } from "@clerk/clerk-react";
 import NewHeroForm from "./NewHeroForm";
 import NewCommentForm from "./NewCommentForm";
 import { useEffect } from "react";
+import { Prisma } from "@prisma/client";
+import { ListBucketsCommand } from "@aws-sdk/client-s3";
 // declare props below
 export default function HeroBlock({
   userIdInClerk,
@@ -12,6 +14,7 @@ export default function HeroBlock({
   photoUrl,
   heroUltimate,
   readHeroPosts,
+  likes,
 }) {
   const [mode, setMode] = useState("read");
   const [comments, setComments] = useState([]);
@@ -83,6 +86,13 @@ export default function HeroBlock({
           <br />
           Hero Ultimate: {heroUltimate}
           <br />
+          Like Count: {likes.length}
+          <br />
+          {user && hasUserLikedHeroPost(user, likes) ? (
+            ""
+          ) : (
+            <button>Add Like 👍</button>
+          )}
           <div>
             <NewCommentForm heroPostId={id} readComments={fetchComments} />
 
@@ -98,4 +108,23 @@ export default function HeroBlock({
       )}
     </>
   );
+}
+
+/**
+ *
+ * @param {Prisma.UserGetPayload} user
+ * @param {Prisma.LikeGetPayload[]} likes
+ */
+function hasUserLikedHeroPost(user, likes) {
+  console.log("user: ", user);
+  console.log("likes: ", likes);
+  // For each of the likes
+  for (let i = 0; i < likes.length; i++) {
+    // If its userId property matches user.id
+    if (likes[i] == user.id) {
+      return true;
+    }
+  } // Return true
+
+  return false;
 }

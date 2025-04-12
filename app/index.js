@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import { PrismaClient } from "@prisma/client";
-import { requireAuth } from "@clerk/express";
+import { clerkClient, requireAuth } from "@clerk/express";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { clerkMiddleware } from "@clerk/express";
@@ -28,7 +28,17 @@ const app = express();
 app.use(express.static(path.join(__dirname, "./client/dist")));
 
 app.use(clerkMiddleware());
+app.use(async (req, res, next) => {
+  if (req.auth.sessionId) {
+    const token = await clerkClient.sessions.getToken(
+      req.auth.sessionId,
+      "test"
+    );
+    console.log("this is the token: ", token.jwt);
+  }
 
+  next();
+});
 // turn res objects into json via express
 app.use(express.json());
 // add a request handler
@@ -48,7 +58,7 @@ app.get(
 
     // sort the heroes by newest on top
     const heroPosts = await prisma.heroPost.findMany({
-      include: { user: true },
+      include: { user: true, likes: true },
       orderBy: { createdAt: "desc" },
     });
     res.send(heroPosts);
@@ -197,6 +207,48 @@ app.get(
     res.send(comment);
   }
 );
+
+// updating
+// two separate routes: liking other people's posts, but not the heroes themselves.  also, not liking your own posts.
+
+app.put(
+  "/api/hero-post/:heroPostId/like",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    const userIdInClerk = req.auth.userId;
+    await prisma.like.create({
+      data: {
+        heroPost: { connect: { id: Number(req.params.heroPostId) } },
+        user: { connect: { idInClerk: userIdInClerk } },
+      },
+    });
+    res.send({ success: true });
+  }
+);
+
+// how to identify which like to delete
+app.put(
+  "/api/hero-post/:heroPostId/unlike",
+  requireAuth({ signInUrl: "/sign-in" }),
+  async (req, res) => {
+    const userIdInClerk = req.auth.userId;
+    const user = await prisma.user.findFirst({
+      where: {
+        idInClerk: userIdInClerk,
+      },
+    });
+    await prisma.like.delete({
+      where: {
+        userId_heroPostId: {
+          userId: user.id,
+          heroPostId: Number(req.params.heroPostId),
+        },
+      },
+    });
+    res.send({ success: true });
+  }
+);
+
 app.listen(3000, () => {
   console.log("server is listening on port 3000");
 });

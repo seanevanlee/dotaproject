@@ -23,6 +23,7 @@ model User {
   username  String     @unique
   heroPosts HeroPost[]
   comments  Comment[]
+  likes     Like[]
 }
 
 // HeroPost model consisting of hero id, photo url, name, and ultimate
@@ -37,6 +38,7 @@ model HeroPost {
   // It will only exist in the object that Prisma gives us when we query the database AND only if we "include" it.
   user      User      @relation(fields: [userId], references: [id])
   comments  Comment[]
+  likes     Like[]
 }
 
 // Make the User and HeroPost models related to see relevant posts using @relation and corresponding model
@@ -53,4 +55,16 @@ model Comment {
   user User @relation(fields: [userId], references: [id])
 
   heroPost HeroPost @relation(fields: [heroPostId], references: [id])
+}
+
+// a like model ensures that a user cannot duplicate likes to add to the overall count
+model Like {
+  id         Int  @id @default(autoincrement())
+  userId     Int
+  heroPostId Int
+  user       User @relation(fields: [userId], references: [id])
+
+  heroPost HeroPost @relation(fields: [heroPostId], references: [id])
+
+  @@unique([userId, heroPostId])
 }
