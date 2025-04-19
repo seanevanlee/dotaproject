@@ -255,3 +255,14 @@ app.listen(3000, () => {
 
 // middleware function: request, response, and next.
 // to call next function if the user who sent the request is logged in. Confer how Clerk verifies the user is logged in
+
+// get the currently logged in user
+app.get(`/api/current-user`, async (req, res) => {
+  const userIdInClerk = req.auth.userId;
+  // use prisma to find a user
+  const user = await prisma.user.findFirst({
+    where: { idInClerk: userIdInClerk },
+  });
+  // res.send to send the user back to the front-end
+  res.send(user);
+});

@@ -7,6 +7,7 @@ import {
 
 import HeroFeed from "./components/HeroFeed";
 import NewHeroForm from "./components/NewHeroForm";
+import SearchControls from "./components/SearchControls";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -52,7 +53,7 @@ function App() {
       <main className="flex justify-center">
         <div className="flex items-center container flex-col space-y-7">
           <NewHeroForm readHeroPosts={fetchHeroPosts} />
-
+          <SearchControls />
           <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
         </div>
       </main>

@@ -19,7 +19,29 @@ export default function HeroBlock({
   const [mode, setMode] = useState("read");
   const [comments, setComments] = useState([]);
   // useUser will return an object with a property called User
-  const { user, isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn } = useUser();
+  const [user, setUser] = useState();
+
+  // useEffect with a fetch to send a request to API
+  async function fetchCurrentUser() {
+    // store the return value of the function in a variable
+    // give option to follow redirect
+    const response = await fetch(`/api/current-user`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error("Something went wrong. Please try again.");
+    }
+    const data = await response.json();
+    // intermediate state to get data into hero blocks
+    setUser(data);
+  }
+
+  useEffect(() => {
+    fetchCurrentUser();
+
+    // leave the dependency array blank since the code is only ran once
+  }, []);
 
   async function fetchComments() {
     // store the return value of the function in a variable
@@ -53,8 +75,31 @@ export default function HeroBlock({
     console.log("Hero deleted!");
   };
 
+  // change the mode of the form to edit mode
   const handleEditClick = async () => {
     setMode("edit");
+  };
+
+  const handleLikeClick = async () => {
+    const response = await fetch(`/api/hero-post/${id}/like`, {
+      method: "PUT",
+    });
+    if (!response.ok) {
+      throw new Error("Something went wrong. Please try again.");
+    }
+    readHeroPosts();
+    console.log("like created");
+  };
+
+  const handleUnlikeClick = async () => {
+    const response = await fetch(`/api/hero-post/${id}/unlike`, {
+      method: "PUT",
+    });
+    if (!response.ok) {
+      throw new Error("Something went wrong. Please try again.");
+    }
+    readHeroPosts();
+    console.log("like removed");
   };
 
   return (
@@ -73,6 +118,7 @@ export default function HeroBlock({
           <div className="text-5xl">Hero Name: {heroName}</div>
           {isLoaded == true &&
           isSignedIn == true &&
+          user &&
           user.id == userIdInClerk ? (
             <>
               <button onClick={handleDeleteClick}>Delete</button>
@@ -89,9 +135,9 @@ export default function HeroBlock({
           Like Count: {likes.length}
           <br />
           {user && hasUserLikedHeroPost(user, likes) ? (
-            ""
+            <button onClick={handleUnlikeClick}>👍</button>
           ) : (
-            <button>Add Like 👍</button>
+            <button onClick={handleLikeClick}>👍</button>
           )}
           <div>
             <NewCommentForm heroPostId={id} readComments={fetchComments} />
@@ -111,9 +157,10 @@ export default function HeroBlock({
 }
 
 /**
- *
+ * if this user has a like in this array of likes then the function returns true; otherwise it is false
  * @param {Prisma.UserGetPayload} user
  * @param {Prisma.LikeGetPayload[]} likes
+ *
  */
 function hasUserLikedHeroPost(user, likes) {
   console.log("user: ", user);
@@ -121,7 +168,7 @@ function hasUserLikedHeroPost(user, likes) {
   // For each of the likes
   for (let i = 0; i < likes.length; i++) {
     // If its userId property matches user.id
-    if (likes[i] == user.id) {
+    if (likes[i].userId == user.id) {
       return true;
     }
   } // Return true
