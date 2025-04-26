@@ -101,6 +101,9 @@ export default function HeroBlock({
     readHeroPosts();
     console.log("like removed");
   };
+  console.log(user);
+  console.log(user?.id);
+  console.log(userIdInClerk);
 
   return (
     <>
@@ -119,7 +122,7 @@ export default function HeroBlock({
           {isLoaded == true &&
           isSignedIn == true &&
           user &&
-          user.id == userIdInClerk ? (
+          user.idInClerk == userIdInClerk ? (
             <>
               <button onClick={handleDeleteClick}>Delete</button>
               <br />
@@ -163,8 +166,8 @@ export default function HeroBlock({
  *
  */
 function hasUserLikedHeroPost(user, likes) {
-  console.log("user: ", user);
-  console.log("likes: ", likes);
+  // console.log("user: ", user);
+  // console.log("likes: ", likes);
   // For each of the likes
   for (let i = 0; i < likes.length; i++) {
     // If its userId property matches user.id

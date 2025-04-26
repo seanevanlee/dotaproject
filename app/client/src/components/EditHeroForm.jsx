@@ -41,6 +41,7 @@ export default function EditHeroForm({
 
   return (
     <form onSubmit={handleSubmit}>
+      <img className="h-28" src={photoUrl} />
       Name:
       <input
         type="text"

@@ -54,7 +54,7 @@ model Comment {
 
   user User @relation(fields: [userId], references: [id])
 
-  heroPost HeroPost @relation(fields: [heroPostId], references: [id])
+  heroPost HeroPost @relation(fields: [heroPostId], references: [id], onDelete: Cascade)
 }
 
 // a like model ensures that a user cannot duplicate likes to add to the overall count
@@ -64,7 +64,7 @@ model Like {
   heroPostId Int
   user       User @relation(fields: [userId], references: [id])
 
-  heroPost HeroPost @relation(fields: [heroPostId], references: [id])
+  heroPost HeroPost @relation(fields: [heroPostId], references: [id], onDelete: Cascade)
 
   @@unique([userId, heroPostId])
 }

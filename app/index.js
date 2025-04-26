@@ -53,14 +53,24 @@ app.get(
   "/api/hero-post",
   requireAuth({ signInUrl: "/sign-in" }),
   async (req, res) => {
+    // get the sorted likes from the request
+    // sort with the newest first by default
+    const sort = req.query.sort || "createdAt";
+    const order = req.query.order || "desc";
     // data will be an array of objects. API route to get that data.
     // using await inside the async. this will be visible in HTTP tests.
 
     // sort the heroes by newest on top
     const heroPosts = await prisma.heroPost.findMany({
       include: { user: true, likes: true },
-      orderBy: { createdAt: "desc" },
+      // orderBy: { [sort]: order },
+      // orderBy: { [sort]: { _count: order } },
+      // use the comparison operator
+      orderBy: { [sort]: sort == "createdAt" ? order : { _count: order } },
+
+      take: 15,
     });
+
     res.send(heroPosts);
   }
 );
@@ -249,10 +259,6 @@ app.put(
   }
 );
 
-app.listen(3000, () => {
-  console.log("server is listening on port 3000");
-});
-
 // middleware function: request, response, and next.
 // to call next function if the user who sent the request is logged in. Confer how Clerk verifies the user is logged in
 
@@ -263,6 +269,15 @@ app.get(`/api/current-user`, async (req, res) => {
   const user = await prisma.user.findFirst({
     where: { idInClerk: userIdInClerk },
   });
+
+  // TODO:
+  // If user is not defined...
+  // Create a user record with userIdInClerk and clerk username(?)
+
   // res.send to send the user back to the front-end
   res.send(user);
+});
+
+app.listen(3000, () => {
+  console.log("server is listening on port 3000");
 });

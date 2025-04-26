@@ -1,0 +1,3 @@
+1. Create a user record in OUR database when the user signs up through clerk
+2. Pageinate hero posts
+3. Retain sorting preference on refresh

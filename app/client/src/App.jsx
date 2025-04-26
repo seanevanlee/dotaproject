@@ -14,12 +14,18 @@ function App() {
   // const [count, setCount] = useState(0)
   const [heroPosts, setHeroPosts] = useState();
 
-  async function fetchHeroPosts() {
+  async function fetchHeroPosts(
+    { sort, order } = { sort: "createdAt", order: "desc" }
+  ) {
     // store the return value of the function in a variable
     // give option to follow redirect
-    const response = await fetch("http://localhost:5173/api/hero-post", {
-      method: "GET",
-    });
+    // able to do sort and order when passed in
+    const response = await fetch(
+      `http://localhost:5173/api/hero-post?sort=${sort}&order=${order}`,
+      {
+        method: "GET",
+      }
+    );
     if (response.redirected) {
       window.location.href = response.url;
     }
@@ -30,7 +36,7 @@ function App() {
 
   useEffect(() => {
     // after defining it as async above then call it again
-    fetchHeroPosts();
+    fetchHeroPosts({ sort: "createdAt", order: "desc" });
   }, []);
 
   // Dota logo on left, Clerk logo on right
@@ -53,7 +59,7 @@ function App() {
       <main className="flex justify-center">
         <div className="flex items-center container flex-col space-y-7">
           <NewHeroForm readHeroPosts={fetchHeroPosts} />
-          <SearchControls />
+          <SearchControls readHeroPosts={fetchHeroPosts} />
           <HeroFeed heroPosts={heroPosts} readHeroPosts={fetchHeroPosts} />
         </div>
       </main>
