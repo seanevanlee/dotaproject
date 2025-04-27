@@ -120,6 +120,7 @@ app.put(
         photoUrl: req.body.photoUrl,
         ultimate: req.body.ultimate,
       },
+
       where: { id: Number(req.params.id) },
     });
     res.send("update this hero info response");
@@ -265,14 +266,34 @@ app.put(
 // get the currently logged in user
 app.get(`/api/current-user`, async (req, res) => {
   const userIdInClerk = req.auth.userId;
+
+  // User is logged in:
+  // userIdInClerk: "abc123"
+
+  // User is NOT logged in:
+  // userIdInClerk: undefined
+
   // use prisma to find a user
   const user = await prisma.user.findFirst({
     where: { idInClerk: userIdInClerk },
   });
 
-  // TODO:
-  // If user is not defined...
-  // Create a user record with userIdInClerk and clerk username(?)
+  // If user is logged in, but there's no user record in OUR db
+  // the values come from clerk
+  // conditional API request
+
+  if (userIdInClerk && !user) {
+    const clerkUser = await clerkClient.users.getUser(userIdInClerk);
+    await prisma.user.upsert({
+      data: {
+        idInClerk: userIdInClerk,
+        username: clerkUser.username,
+      },
+      create: { idInClerk: userIdInClerk, username: clerkUser.username },
+      update: { idInClerk: userIdInClerk, username: clerkUser.username },
+      where: { idInClerk: userIdInClerk },
+    });
+  }
 
   // res.send to send the user back to the front-end
   res.send(user);

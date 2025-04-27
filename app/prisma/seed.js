@@ -6,25 +6,25 @@ const prisma = new PrismaClient();
 // async code with await
 await prisma.user.upsert({
   create: {
-    username: "seanevanlee@gmail.com",
+    username: "bagelwrangler",
     idInClerk: "user_2t9G1pJmPcMOxMUUzog4kmyZHoy",
   },
   update: {},
   where: {
-    username: "seanevanlee@gmail.com",
+    username: "bagelwrangler",
     idInClerk: "user_2t9G1pJmPcMOxMUUzog4kmyZHoy",
   },
 });
 
 await prisma.user.upsert({
   create: {
-    username: "seanevanlee@csu.fullerton.edu",
-    idInClerk: "user_2tvScedxo7WFnpblnqSE0gCD3jl",
+    username: "misteroh",
+    idInClerk: "user_2wIHqYMU0AUw9GSHykFaDwsjafc",
   },
   update: {},
   where: {
-    username: "seanevanlee@csu.fullerton.edu",
-    idInClerk: "user_2tvScedxo7WFnpblnqSE0gCD3jl",
+    username: "misteroh",
+    idInClerk: "user_2wIHqYMU0AUw9GSHykFaDwsjafc",
   },
 });
 

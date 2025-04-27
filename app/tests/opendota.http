@@ -1,0 +1,2 @@
+GET /api/heroes HTTP/1.1
+Host: api.opendota.com
