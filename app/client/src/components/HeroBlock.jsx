@@ -4,8 +4,9 @@ import { useUser } from "@clerk/clerk-react";
 import NewHeroForm from "./NewHeroForm";
 import NewCommentForm from "./NewCommentForm";
 import { useEffect } from "react";
-import { Prisma } from "@prisma/client";
+
 import { ListBucketsCommand } from "@aws-sdk/client-s3";
+import { getRelatedHeroes } from "../services/dota-api";
 // declare props below
 export default function HeroBlock({
   userIdInClerk,
@@ -15,12 +16,15 @@ export default function HeroBlock({
   heroUltimate,
   readHeroPosts,
   likes,
+  primaryAttribute,
+  attackType,
 }) {
   const [mode, setMode] = useState("read");
   const [comments, setComments] = useState([]);
   // useUser will return an object with a property called User
   const { isLoaded, isSignedIn } = useUser();
   const [user, setUser] = useState();
+  const [relatedHeroes, setRelatedHeroes] = useState();
 
   // useEffect with a fetch to send a request to API
   async function fetchCurrentUser() {
@@ -41,6 +45,14 @@ export default function HeroBlock({
     fetchCurrentUser();
 
     // leave the dependency array blank since the code is only ran once
+  }, []);
+
+  async function fetchRelatedHeroes() {
+    setRelatedHeroes(await getRelatedHeroes(primaryAttribute, attackType));
+  }
+
+  useEffect(() => {
+    fetchRelatedHeroes();
   }, []);
 
   async function fetchComments() {
@@ -135,7 +147,20 @@ export default function HeroBlock({
           <br />
           Hero Ultimate: {heroUltimate}
           <br />
+          Primary Attribute: {primaryAttribute}
+          <br />
+          Attack Type: {attackType}
+          <br />
           Like Count: {likes.length}
+          <br />
+          Related Heroes:
+          <br />
+          {relatedHeroes &&
+            relatedHeroes.map((hero, i) => (
+              <span key={i} className="p-1.5">
+                {hero.localized_name}
+              </span>
+            ))}
           <br />
           {user && hasUserLikedHeroPost(user, likes) ? (
             <button onClick={handleUnlikeClick}>👍</button>

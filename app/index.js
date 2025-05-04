@@ -84,6 +84,8 @@ app.post(
         name: req.body.name,
         photoUrl: req.body.photoUrl,
         ultimate: req.body.ultimate,
+        primaryAttribute: req.body.primaryAttribute,
+        attackType: req.body.attackType,
         // req.auth.userId for the current user's ID in Clerk
         user: { connect: { idInClerk: req.auth.userId } },
       },
@@ -147,6 +149,17 @@ app.delete(
     res.send("delete this hero info reponse");
   }
 );
+
+app.get("/api/heroes", async (req, res) => {
+  const response = await fetch(`http://api.opendota.com/api/heroes`, {
+    method: "GET",
+  });
+
+  /** @type {object[]} */
+  const data = await response.json();
+
+  res.send(data);
+});
 
 app.post(
   "/api/generate-upload-url",

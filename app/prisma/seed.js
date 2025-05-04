@@ -33,9 +33,11 @@ await prisma.heroPost.upsert({
     name: "cool hero",
     photoUrl: "https://i.imgur.com/NK6Ofjs.jpeg",
     ultimate: "does cool stuff",
+    primaryAttribute: "STRENGTH",
+    attackType: "MELEE",
     user: {
       connect: {
-        username: "seanevanlee@gmail.com",
+        username: "bagelwrangler",
       },
     },
   },

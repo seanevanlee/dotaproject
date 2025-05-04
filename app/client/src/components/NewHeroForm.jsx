@@ -5,6 +5,8 @@ export default function NewHeroForm({ readHeroPosts }) {
   const [name, setName] = useState();
   const [photoFile, setPhotoFile] = useState();
   const [ultimate, setUltimate] = useState();
+  const [primaryAttribute, setPrimaryAttribute] = useState("STRENGTH");
+  const [attackType, setAttackType] = useState("RANGED");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +22,13 @@ export default function NewHeroForm({ readHeroPosts }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, photoUrl, ultimate }),
+      body: JSON.stringify({
+        name,
+        photoUrl,
+        ultimate,
+        primaryAttribute,
+        attackType,
+      }),
     });
 
     // 'false' if error status code
@@ -40,7 +48,7 @@ export default function NewHeroForm({ readHeroPosts }) {
   return (
     <form className="border border-b-black rounded p-4" onSubmit={handleSubmit}>
       {/* Grab value from text box */}
-      Submit Hero Name:
+      Hero Name:
       <input
         className="border border-b-black rounded p-4"
         type="text"
@@ -49,7 +57,7 @@ export default function NewHeroForm({ readHeroPosts }) {
         }}
         value={name}
       />
-      Submit Photo:
+      Photo:
       <input
         className="border border-gray-200 rounded p-4"
         type="file"
@@ -57,7 +65,7 @@ export default function NewHeroForm({ readHeroPosts }) {
           setPhotoFile(e.target.files[0]);
         }}
       />
-      Submit Ultimate Idea:
+      Ultimate Idea:
       <textarea
         className="border border-gray-200 rounded p-4 w-48 resize-none field-sizing-content"
         onChange={(e) => {
@@ -65,6 +73,30 @@ export default function NewHeroForm({ readHeroPosts }) {
         }}
         value={ultimate}
       ></textarea>
+      Primary Attribute{" "}
+      <select
+        className="border border-b-black rounded p-4"
+        onChange={(e) => {
+          setPrimaryAttribute(e.target.value);
+        }}
+        value={primaryAttribute}
+      >
+        <option value={"STRENGTH"}>Strength</option>
+        <option value={"AGILITY"}>Agility</option>
+        <option value={"INTELLIGENCE"}>Intelligence</option>
+      </select>
+      Attack Type{" "}
+      <select
+        className="border border-b-black rounded p-4"
+        onChange={(e) => {
+          console.log(e.target.value);
+          setAttackType(e.target.value);
+        }}
+        value={attackType}
+      >
+        <option value={"RANGED"}>Ranged</option>
+        <option value={"MELEE"}>Melee</option>
+      </select>
       <button>Submit</button>
     </form>
   );

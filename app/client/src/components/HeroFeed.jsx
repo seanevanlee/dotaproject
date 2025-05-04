@@ -17,6 +17,8 @@ export default function HeroFeed({ heroPosts, readHeroPosts }) {
               heroName={heroPost.name}
               photoUrl={heroPost.photoUrl}
               heroUltimate={heroPost.ultimate}
+              primaryAttribute={heroPost.primaryAttribute}
+              attackType={heroPost.attackType}
               likes={heroPost.likes}
             />
           ))
