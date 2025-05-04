@@ -33,8 +33,10 @@ FROM base-stage AS install-stage
 # /dotaproject/app/other/package.json
 # COPY --parents /package*.json /**/package*.json /dotaproject/
 
-COPY /package.json /dotaproject/app/
-COPY /client/package.json /dotaproject/app/client/
+COPY /app/package.json /dotaproject/app/
+COPY /app/package-lock.json /dotaproject/app/
+COPY /app/client/package.json /dotaproject/app/client/
+COPY /app/client/package-lock.json /dotaproject/app/client/
 
 # Like the "cd" command. All following directives in this Dockerfile will be relative to /dotaproject/app inside the image.
 WORKDIR /dotaproject/app
@@ -49,7 +51,7 @@ RUN npm ci
 ENV NODE_ENV=$ENVIRONMENT
 
 # Copy our source code into the image.
-COPY ./app .
+COPY /app .
 
 # Allows network connections into the container through this port.
 EXPOSE $PORT
