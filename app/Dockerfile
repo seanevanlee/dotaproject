@@ -31,7 +31,11 @@ FROM base-stage AS install-stage
 # Copy ALL package.json files in our entire project folder into /dotaproject/, including the folders in the paths to those files...
 # /dotaproject/app/package.json
 # /dotaproject/app/other/package.json
-COPY --parents /package*.json /**/package*.json /dotaproject/
+# COPY --parents /package*.json /**/package*.json /dotaproject/
+
+COPY /package.json /dotaproject/app/
+COPY /client/package.json /dotaproject/app/client/
+
 # Like the "cd" command. All following directives in this Dockerfile will be relative to /dotaproject/app inside the image.
 WORKDIR /dotaproject/app
 
